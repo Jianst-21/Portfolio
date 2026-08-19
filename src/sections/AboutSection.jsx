@@ -102,23 +102,23 @@ export default function AboutSection() {
   return (
     <div ref={containerRef} className="relative h-[200vh] pt-12 md:pt-16" id="tentang">
       
-      {/* Sticky Container - Opaque background, top offset (top-24) to prevent overlap */}
-      <div className="sticky top-24 h-[calc(100vh-100px)] flex flex-col justify-between pt-2 pb-4 overflow-hidden bg-[var(--bg)] z-20">
+      {/* Sticky Container - Transparent background to show global ambient glow */}
+      <div className="sticky top-24 h-[calc(100vh-100px)] flex flex-col justify-between pt-2 pb-4 overflow-hidden bg-transparent z-20">
         
         {/* Dynamic Smooth Fade Gradients on Left and Right Edges (Active ONLY during horizontal scroll) */}
         <div 
-          className={`absolute top-0 bottom-0 left-0 w-12 md:w-20 bg-gradient-to-r from-[var(--bg)] to-transparent z-30 pointer-events-none transition-opacity duration-300 ${
+          className={`absolute top-0 bottom-0 left-0 w-12 md:w-20 bg-gradient-to-r from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-300 ${
             translateX > 15 ? 'opacity-100' : 'opacity-0'
           }`} 
         />
         <div 
-          className={`absolute top-0 bottom-0 right-0 w-12 md:w-20 bg-gradient-to-l from-[var(--bg)] to-transparent z-30 pointer-events-none transition-opacity duration-300 ${
+          className={`absolute top-0 bottom-0 right-0 w-12 md:w-20 bg-gradient-to-l from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-300 ${
             maxScroll > 0 && translateX < maxScroll - 15 ? 'opacity-100' : 'opacity-0'
           }`} 
         />
 
         {/* Top Header & Slide Indicator Navigation */}
-        <div className="w-full shrink-0 bg-[var(--bg)] z-30 pt-2 flex items-center justify-between">
+        <div className="w-full shrink-0 z-30 pt-2 flex items-center justify-between">
           <div className="flex-1">
             <SectionHeader title="Tentang Saya" highlight="Saya" />
           </div>

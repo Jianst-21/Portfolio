@@ -108,6 +108,21 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translate3d(-50%, 0, 0); }
 }
 
+@keyframes ambient-breathe {
+  0%, 100% {
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  50% {
+    opacity: 0.42;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+@utility animate-ambient-breathe {
+  animation: ambient-breathe 8s ease-in-out infinite;
+}
+
 @utility animate-fade-up {
   animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
