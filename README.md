@@ -2,7 +2,7 @@
 
 Sleek, modern, and highly interactive personal developer portfolio website showcasing projects, capabilities, and work experience. Built with Next.js, React, TailwindCSS, and Three.js.
 
- Live Preview: [jinst-portfolio.vercel.app](https://jianst-dev.vercel.app)
+ Live Preview: [jianst-dev.vercel.app](https://jianst-dev.vercel.app)
 
 ---
 
