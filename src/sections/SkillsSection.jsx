@@ -96,6 +96,9 @@ export default function SkillsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
+  const isIdleRef = useRef(true);
+  const activeIndexRef = useRef(0);
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -104,8 +107,6 @@ export default function SkillsSection() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-
 
   useEffect(() => {
     let ticking = false;
@@ -117,8 +118,8 @@ export default function SkillsSection() {
       }
 
       const rect = containerRef.current.getBoundingClientRect();
-      const INTRO_BOUND = 0.1;
-      const OUTRO_BOUND = 0.9;
+      const INTRO_BOUND = 0.08;
+      const OUTRO_BOUND = 0.92;
 
       const scrollableDistance = rect.height - window.innerHeight;
       const scrolledInto = -rect.top;
@@ -128,20 +129,32 @@ export default function SkillsSection() {
         progress = Math.min(1, Math.max(0, scrolledInto / scrollableDistance));
       }
 
+      let nextIdle = isIdleRef.current;
+      let nextIndex = activeIndexRef.current;
+
       if (progress < INTRO_BOUND) {
-        setIsIdle(true);
-        setActiveIndex(0);
+        nextIdle = true;
+        nextIndex = 0;
       } else if (progress >= OUTRO_BOUND) {
-        setIsIdle(true);
-        setActiveIndex(TECH_ECOSYSTEM.length - 1);
+        nextIdle = true;
+        nextIndex = TECH_ECOSYSTEM.length - 1;
       } else {
-        setIsIdle(false);
+        nextIdle = false;
         const techProgress = (progress - INTRO_BOUND) / (OUTRO_BOUND - INTRO_BOUND);
-        const newIndex = Math.min(
+        nextIndex = Math.min(
           TECH_ECOSYSTEM.length - 1,
-          Math.floor(techProgress * TECH_ECOSYSTEM.length)
+          Math.max(0, Math.floor(techProgress * TECH_ECOSYSTEM.length))
         );
-        setActiveIndex(newIndex);
+      }
+
+      if (nextIdle !== isIdleRef.current) {
+        isIdleRef.current = nextIdle;
+        setIsIdle(nextIdle);
+      }
+
+      if (nextIndex !== activeIndexRef.current) {
+        activeIndexRef.current = nextIndex;
+        setActiveIndex(nextIndex);
       }
 
       ticking = false;
@@ -162,7 +175,7 @@ export default function SkillsSection() {
   const activeTech = TECH_ECOSYSTEM[activeIndex];
 
   return (
-    <div ref={containerRef} className="relative h-[450vh] pt-6 md:pt-16" id="kemampuan">
+    <div ref={containerRef} className="relative h-[300vh] pt-6 md:pt-16" id="kemampuan">
 
       {/* Sticky Viewport Container */}
       <div className="sticky top-14 lg:top-24 h-[calc(100vh-60px)] lg:h-[calc(100vh-100px)] flex flex-col justify-between pt-1 pb-2 lg:pt-2 lg:pb-6 overflow-hidden bg-transparent z-20">

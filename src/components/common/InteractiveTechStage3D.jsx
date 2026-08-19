@@ -64,9 +64,9 @@ export default function InteractiveTechStage3D({
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
     camera.position.set(0, 0, 4.2);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(size, size);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     containerRef.current.appendChild(renderer.domElement);
 
     // Build textured materials (one per face)
@@ -95,7 +95,7 @@ export default function InteractiveTechStage3D({
 
       paint(null);
       const texture = new THREE.CanvasTexture(cvs);
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
       const img = new Image();
       img.src = item.src;
       img.onload = () => { paint(img); texture.needsUpdate = true; };
@@ -129,8 +129,8 @@ export default function InteractiveTechStage3D({
         } else {
           // ── Face-lock (detail mode) — lerp toward target face ───────────────
           const target = FACE_ROTATIONS[activeIdxRef.current % FACE_ROTATIONS.length];
-          cubeRef.current.rotation.y += shortAngle(cubeRef.current.rotation.y, target.y) * 0.08;
-          cubeRef.current.rotation.x += shortAngle(cubeRef.current.rotation.x, target.x) * 0.08;
+          cubeRef.current.rotation.y += shortAngle(cubeRef.current.rotation.y, target.y) * 0.14;
+          cubeRef.current.rotation.x += shortAngle(cubeRef.current.rotation.x, target.x) * 0.14;
         }
 
         // Gentle floating bob (always active)
