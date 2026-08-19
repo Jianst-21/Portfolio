@@ -16,11 +16,11 @@ export default function MetricTickerSection() {
   const items = [...METRICS, ...METRICS];
 
   return (
-    <div className="w-screen relative left-1/2 -translate-x-1/2 py-4 md:py-6 overflow-hidden select-none">
+    <div className="w-full py-4 md:py-6 overflow-hidden relative select-none">
       
-      {/* Left/Right Smooth Fade Masks with multi-stops at absolute screen edges */}
-      <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 md:w-44 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/70 to-transparent z-10 pointer-events-none" />
-      <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 md:w-44 bg-gradient-to-l from-[var(--bg)] via-[var(--bg)]/70 to-transparent z-10 pointer-events-none" />
+      {/* Left/Right Smooth Fade Masks with multi-stops at screen edges */}
+      <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 md:w-36 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/70 to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 md:w-36 bg-gradient-to-l from-[var(--bg)] via-[var(--bg)]/70 to-transparent z-10 pointer-events-none" />
 
       {/* Hardware Accelerated Infinite Marquee Track */}
       <div className="flex whitespace-nowrap animate-marquee w-max shrink-0">

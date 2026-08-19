@@ -244,7 +244,7 @@ export default function HeroSection() {
       </div>
 
       {/* Metric Ticker Section Pinned Right at Bottom Edge of Screen 1 */}
-      <div className="w-full shrink-0 pt-2 pb-1 overflow-hidden">
+      <div className="-mx-6 sm:-mx-8 shrink-0 pt-2 pb-1 overflow-hidden">
         <MetricTickerSection />
       </div>
 
