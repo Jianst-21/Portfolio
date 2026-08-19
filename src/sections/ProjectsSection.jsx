@@ -35,10 +35,10 @@ const projects = [
   },
   {
     title: 'HeyHRS',
-    desc: 'Platform internal administrasi karyawan, absensi, dan laporan operasional harian berbasis Node.js guna digitalisasi proses bisnis.',
+    desc: 'Platform sistem informasi pembuatan faktur serta pengelolaan & rekapitulasi data penjualan per minggu, bulan, dan tahun berbasis Node.js & React.js.',
     layer: 'be',
     tags: ['React.js', 'Node.js', 'ExpressJS', 'Supabase'],
-    url: 'https://heyhrs.vercel.app/',
+    url: 'https://heyhrs.vercel.app/faktur',
     image: '/assets/heyhrs.jpg'
   },
   {

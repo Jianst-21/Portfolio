@@ -50,8 +50,6 @@ const row3Chips = [
 export default function AboutSection() {
   const containerRef  = useRef(null);
   const trackRef      = useRef(null);
-  const leftFadeRef   = useRef(null);
-  const rightFadeRef  = useRef(null);
   const dot0Ref       = useRef(null);
   const dot1Ref       = useRef(null);
 
@@ -87,11 +85,6 @@ export default function AboutSection() {
 
       // ── Direct DOM mutations — zero React overhead ──
       trackRef.current.style.transform = `translate3d(-${tx}px, 0, 0)`;
-
-      if (leftFadeRef.current)
-        leftFadeRef.current.style.opacity  = tx > 15 ? '1' : '0';
-      if (rightFadeRef.current)
-        rightFadeRef.current.style.opacity = maxTrack > 0 && tx < maxTrack - 15 ? '1' : '0';
 
       const newSlide = progress > 0.45 ? 1 : 0;
       if (newSlide !== activeSlideRef.current) {
@@ -137,16 +130,6 @@ export default function AboutSection() {
       {/* Sticky Container */}
       <div className="sticky top-24 h-[calc(100vh-100px)] flex flex-col justify-between pt-2 pb-4 overflow-hidden bg-transparent z-20">
         
-        {/* Fade Gradients — opacity driven by direct DOM ref */}
-        <div 
-          ref={leftFadeRef}
-          className="absolute top-0 bottom-0 left-0 w-12 md:w-20 bg-gradient-to-r from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-200 opacity-0"
-        />
-        <div 
-          ref={rightFadeRef}
-          className="absolute top-0 bottom-0 right-0 w-12 md:w-20 bg-gradient-to-l from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-200 opacity-0"
-        />
-
         {/* Top Header & Slide Indicator Navigation */}
         <div className="w-full shrink-0 z-30 pt-2 flex items-center justify-between">
           <div className="flex-1">
@@ -154,16 +137,16 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Horizontal Track — transform driven by direct DOM mutation */}
+        {/* Horizontal Track — gap-0 so maxScroll = exactly one slide width */}
         <div className="w-full overflow-hidden relative z-20 my-auto">
           <div
             ref={trackRef}
-            className="flex items-start gap-16 md:gap-24 will-change-transform pt-1"
+            className="flex items-start gap-0 will-change-transform pt-1"
             style={{ transform: 'translate3d(0px, 0, 0)' }}
           >
 
-            {/* SLIDE 1: Profil & Filosofi (Matching Reference Image 1 Layout) */}
-            <div className="w-full min-w-full shrink-0 flex flex-col">
+            {/* SLIDE 1: Profil & Filosofi */}
+            <div className="w-full min-w-full shrink-0 flex flex-col pr-12 md:pr-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-stretch">
                 
                 {/* Left Tall Photo Card */}
@@ -228,32 +211,32 @@ export default function AboutSection() {
               </div>
             </div>
 
-            {/* SLIDE 2: Standar & Prinsip (Spacious 3 / 3 / 2 + Cube Layout) */}
-            <div className="w-full min-w-full shrink-0 flex flex-col">
+            {/* SLIDE 2: Standar & Prinsip */}
+            <div className="w-full min-w-full shrink-0 flex flex-col pl-12 md:pl-16">
               
               {/* Clean Title */}
               <h3 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-[var(--ink)] tracking-tight mb-6 sm:mb-8">
                 Kode Berstruktur, Performa, & Dampak Nyata.
               </h3>
 
-              {/* Generous Spacious 3 / 3 / 2 + Cube Structured Layout */}
-              <div className="w-full max-w-[1120px] flex flex-col gap-5 sm:gap-7 md:gap-8 pr-6 sm:pr-8">
+              {/* Generous Spacious Card Grid Layout */}
+              <div className="w-full flex flex-col gap-4 sm:gap-6">
                 
-                {/* ROW 1: 3 Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
+                {/* ROW 1: 2 cols on mobile, 3 on desktop */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6">
                   {row1Chips.map((item, index) => {
                     const IconComponent = item.icon;
                     return (
                       <div
                         key={index}
-                        className={`border rounded-2xl px-5 sm:px-6 py-4 flex items-center gap-3.5 font-mono text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 ${item.tilt} ${
+                        className={`border rounded-2xl px-3 sm:px-5 py-3.5 flex items-center gap-2.5 sm:gap-3.5 font-mono text-xs sm:text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 ${item.tilt} ${
                           item.active 
                             ? 'border-[var(--active)]/70 bg-[var(--card)] shadow-[0_0_20px_rgba(232,163,61,0.2)]'
                             : 'border-[var(--line)] bg-[var(--card)] hover:border-[var(--active)]'
                         }`}
                       >
-                        <div className="w-9 h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
-                          <IconComponent size={17} className="text-[var(--active)]" />
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
+                          <IconComponent size={15} className="text-[var(--active)]" />
                         </div>
                         <span className="font-medium tracking-wide leading-snug text-[var(--ink)] group-hover:text-[var(--active)] transition-colors">
                           {item.label}
@@ -263,17 +246,17 @@ export default function AboutSection() {
                   })}
                 </div>
 
-                {/* ROW 2: 3 Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
+                {/* ROW 2: 2 cols on mobile, 3 on desktop */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6">
                   {row2Chips.map((item, index) => {
                     const IconComponent = item.icon;
                     return (
                       <div
                         key={index}
-                        className={`border border-[var(--line)] bg-[var(--card)] rounded-2xl px-5 sm:px-6 py-4 flex items-center gap-3.5 font-mono text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 hover:border-[var(--active)] ${item.tilt}`}
+                        className={`border border-[var(--line)] bg-[var(--card)] rounded-2xl px-3 sm:px-5 py-3.5 flex items-center gap-2.5 sm:gap-3.5 font-mono text-xs sm:text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 hover:border-[var(--active)] ${item.tilt}`}
                       >
-                        <div className="w-9 h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
-                          <IconComponent size={17} className="text-[var(--active)]" />
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
+                          <IconComponent size={15} className="text-[var(--active)]" />
                         </div>
                         <span className="font-medium tracking-wide leading-snug text-[var(--ink)] group-hover:text-[var(--active)] transition-colors">
                           {item.label}
@@ -283,13 +266,13 @@ export default function AboutSection() {
                   })}
                 </div>
 
-                {/* ROW 3: 2 Cards + Floating 3D Cube Aligned in 3rd Column */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 md:gap-7 items-center pt-1">
+                {/* ROW 3: 2 Cards + Cube slot */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6 items-center">
                   
                   {/* Card 7 */}
-                  <div className={`border border-[var(--line)] bg-[var(--card)] rounded-2xl px-5 sm:px-6 py-4 flex items-center gap-3.5 font-mono text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 hover:border-[var(--active)] ${row3Chips[0].tilt}`}>
-                    <div className="w-9 h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
-                      <Terminal size={17} className="text-[var(--active)]" />
+                  <div className={`border border-[var(--line)] bg-[var(--card)] rounded-2xl px-3 sm:px-5 py-3.5 flex items-center gap-2.5 sm:gap-3.5 font-mono text-xs sm:text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 hover:border-[var(--active)] ${row3Chips[0].tilt}`}>
+                    <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
+                      <Terminal size={15} className="text-[var(--active)]" />
                     </div>
                     <span className="font-medium tracking-wide leading-snug text-[var(--ink)] group-hover:text-[var(--active)] transition-colors">
                       {row3Chips[0].label}
@@ -297,17 +280,17 @@ export default function AboutSection() {
                   </div>
 
                   {/* Card 8 */}
-                  <div className={`border border-[var(--active)]/50 bg-[var(--card)] rounded-2xl px-5 sm:px-6 py-4 flex items-center gap-3.5 font-mono text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 hover:border-[var(--active)] ${row3Chips[1].tilt}`}>
-                    <div className="w-9 h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
-                      <Rocket size={17} className="text-[var(--active)]" />
+                  <div className={`border border-[var(--active)]/50 bg-[var(--card)] rounded-2xl px-3 sm:px-5 py-3.5 flex items-center gap-2.5 sm:gap-3.5 font-mono text-xs sm:text-sm transition-all duration-300 shadow-lg cursor-pointer group hover:rotate-0 hover:scale-105 hover:border-[var(--active)] ${row3Chips[1].tilt}`}>
+                    <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center shrink-0 group-hover:border-[var(--active)] transition-colors">
+                      <Rocket size={15} className="text-[var(--active)]" />
                     </div>
                     <span className="font-medium tracking-wide leading-snug text-[var(--ink)] group-hover:text-[var(--active)] transition-colors">
                       {row3Chips[1].label}
                     </span>
                   </div>
 
-                  {/* Slot for Global Tech Cube travel */}
-                  <div className="hidden sm:flex justify-center sm:justify-start items-center pl-4 w-[135px] h-[135px]" />
+                  {/* Cube slot */}
+                  <div className="hidden md:flex justify-center items-center w-[135px] h-[135px]" />
 
                 </div>
 
