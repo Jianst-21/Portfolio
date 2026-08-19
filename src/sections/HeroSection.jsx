@@ -115,7 +115,7 @@ export default function HeroSection() {
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center my-auto py-4">
         
         {/* Left Column: Copy, Socials & Actions */}
-        <div className="lg:col-span-7 flex flex-col items-start text-left z-10">
+        <div className="lg:col-span-7 flex flex-col items-center text-center lg:items-start lg:text-left z-10">
           
           {/* Eyebrow */}
           <span className="font-mono text-xs uppercase tracking-[0.25em] text-[var(--muted)] mb-3 font-medium">
@@ -128,7 +128,7 @@ export default function HeroSection() {
           </h1>
 
           {/* Role Subtitle with Typewriter Animation */}
-          <div className="mb-5 min-h-[60px]">
+          <div className="mb-5 min-h-[60px] flex flex-col items-center lg:items-start">
             <span className="font-mono text-xs uppercase tracking-wider text-[var(--muted)] block mb-1">
               Seorang
             </span>
@@ -140,7 +140,7 @@ export default function HeroSection() {
           </div>
 
           {/* Social Icons Row */}
-          <div className="flex items-center gap-4 mb-6 text-[var(--muted)]">
+          <div className="flex items-center justify-center lg:justify-start gap-4 mb-6 text-[var(--muted)]">
             <a href="https://github.com/Jianst-21" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--ink)] transition-colors p-1" aria-label="GitHub">
               <GithubIcon size={20} />
             </a>
@@ -159,12 +159,12 @@ export default function HeroSection() {
           </div>
 
           {/* Description Paragraph */}
-          <p className="font-body text-base sm:text-lg text-[var(--muted)] max-w-lg mb-8 leading-relaxed">
+          <p className="font-body text-base sm:text-lg text-[var(--muted)] max-w-lg mb-8 leading-relaxed mx-auto lg:mx-0">
             Saya membantu bisnis dan individu mengubah ide menjadi solusi digital yang indah, cerdas, dan berfungsi sempurna.
           </p>
 
           {/* CTA Pill Buttons */}
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex flex-wrap justify-center lg:justify-start gap-4 items-center">
             <a
               href="#proyek"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-body font-semibold text-sm transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] shadow-lg hover:shadow-[0_0_20px_rgba(232,163,61,0.3)]"
