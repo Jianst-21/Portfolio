@@ -12,14 +12,16 @@ export default function ClientLayout({ children }) {
       <LayerProvider>
         <LoadingScreen />
         
-        {/* Smooth Fixed Ambient Breathing Glow in Center of Screen */}
-        <div 
-          className="fixed top-1/2 left-1/2 w-[700px] sm:w-[950px] md:w-[1200px] h-[500px] sm:h-[700px] md:h-[900px] rounded-full pointer-events-none -z-0 animate-ambient-breathe will-change-transform"
-          style={{
-            background: 'radial-gradient(ellipse at center, color-mix(in srgb, var(--active) 40%, transparent) 0%, color-mix(in srgb, var(--active) 22%, transparent) 32%, color-mix(in srgb, var(--active) 8%, transparent) 58%, transparent 78%)',
-            filter: 'blur(100px)',
-          }}
-        />
+        {/* Fixed Ambient Glow Container clipped strictly to viewport */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-0">
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[950px] md:w-[1200px] h-[500px] sm:h-[700px] md:h-[900px] rounded-full animate-ambient-breathe will-change-transform"
+            style={{
+              background: 'radial-gradient(ellipse at center, color-mix(in srgb, var(--active) 40%, transparent) 0%, color-mix(in srgb, var(--active) 22%, transparent) 32%, color-mix(in srgb, var(--active) 8%, transparent) 58%, transparent 78%)',
+              filter: 'blur(100px)',
+            }}
+          />
+        </div>
 
         <div className="relative z-10 flex flex-col min-h-screen">
           <Navbar />

@@ -106,11 +106,8 @@ export default function HeroSection() {
   }, [currentText, isDeleting, roleIndex]);
 
   return (
-    <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-between pt-4 pb-2">
+    <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-between pt-4 pb-2 overflow-x-clip">
       
-      {/* Warm Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[var(--active)]/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-
       {/* Hero Content Grid (Centered in Viewport) */}
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center my-auto py-4">
         
