@@ -20,9 +20,9 @@ export default function FloatingCube3D() {
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
     camera.position.set(0, 0.2, 3.4);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
 
     containerRef.current.appendChild(renderer.domElement);
 
@@ -77,7 +77,7 @@ export default function FloatingCube3D() {
       drawFace();
 
       const texture = new THREE.CanvasTexture(canvas);
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
 
       const img = new Image();
       img.src = item.src;

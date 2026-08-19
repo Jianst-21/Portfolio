@@ -48,10 +48,19 @@ const row3Chips = [
 ];
 
 export default function AboutSection() {
-  const containerRef = useRef(null);
-  const trackRef = useRef(null);
-  const [translateX, setTranslateX] = useState(0);
-  const [maxScroll, setMaxScroll] = useState(0);
+  const containerRef  = useRef(null);
+  const trackRef      = useRef(null);
+  const leftFadeRef   = useRef(null);
+  const rightFadeRef  = useRef(null);
+  const dot0Ref       = useRef(null);
+  const dot1Ref       = useRef(null);
+
+  // Raw refs — no state, no re-renders on every scroll frame
+  const translateXRef = useRef(0);
+  const maxScrollRef  = useRef(0);
+  const activeSlideRef = useRef(0);
+
+  // Expose stable values for scrollToSlide (button clicks)
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
@@ -66,22 +75,28 @@ export default function AboutSection() {
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const totalScrollable = rect.height - windowHeight;
-      if (totalScrollable <= 0) {
-        ticking = false;
-        return;
-      }
+      if (totalScrollable <= 0) { ticking = false; return; }
 
       const currentScroll = -rect.top;
       const progress = Math.max(0, Math.min(1, currentScroll / totalScrollable));
 
       const maxTrack = trackRef.current.scrollWidth - trackRef.current.clientWidth;
-      setMaxScroll(maxTrack);
-      setTranslateX(progress * Math.max(0, maxTrack));
+      maxScrollRef.current = maxTrack;
+      const tx = progress * Math.max(0, maxTrack);
+      translateXRef.current = tx;
 
-      if (progress > 0.45) {
-        setActiveSlide(1);
-      } else {
-        setActiveSlide(0);
+      // ── Direct DOM mutations — zero React overhead ──
+      trackRef.current.style.transform = `translate3d(-${tx}px, 0, 0)`;
+
+      if (leftFadeRef.current)
+        leftFadeRef.current.style.opacity  = tx > 15 ? '1' : '0';
+      if (rightFadeRef.current)
+        rightFadeRef.current.style.opacity = maxTrack > 0 && tx < maxTrack - 15 ? '1' : '0';
+
+      const newSlide = progress > 0.45 ? 1 : 0;
+      if (newSlide !== activeSlideRef.current) {
+        activeSlideRef.current = newSlide;
+        setActiveSlide(newSlide);          // only fires when slide index truly changes
       }
 
       ticking = false;
@@ -119,19 +134,17 @@ export default function AboutSection() {
   return (
     <div ref={containerRef} className="relative h-[200vh] pt-12 md:pt-16" id="tentang">
       
-      {/* Sticky Container - Transparent background to show global ambient glow */}
+      {/* Sticky Container */}
       <div className="sticky top-24 h-[calc(100vh-100px)] flex flex-col justify-between pt-2 pb-4 overflow-hidden bg-transparent z-20">
         
-        {/* Dynamic Smooth Fade Gradients on Left and Right Edges (Active ONLY during horizontal scroll) */}
+        {/* Fade Gradients — opacity driven by direct DOM ref */}
         <div 
-          className={`absolute top-0 bottom-0 left-0 w-12 md:w-20 bg-gradient-to-r from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-300 ${
-            translateX > 15 ? 'opacity-100' : 'opacity-0'
-          }`} 
+          ref={leftFadeRef}
+          className="absolute top-0 bottom-0 left-0 w-12 md:w-20 bg-gradient-to-r from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-200 opacity-0"
         />
         <div 
-          className={`absolute top-0 bottom-0 right-0 w-12 md:w-20 bg-gradient-to-l from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-300 ${
-            maxScroll > 0 && translateX < maxScroll - 15 ? 'opacity-100' : 'opacity-0'
-          }`} 
+          ref={rightFadeRef}
+          className="absolute top-0 bottom-0 right-0 w-12 md:w-20 bg-gradient-to-l from-[var(--bg)]/80 to-transparent z-30 pointer-events-none transition-opacity duration-200 opacity-0"
         />
 
         {/* Top Header & Slide Indicator Navigation */}
@@ -141,12 +154,12 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Horizontal Track Wrapper Aligned to Container Width */}
+        {/* Horizontal Track — transform driven by direct DOM mutation */}
         <div className="w-full overflow-hidden relative z-20 my-auto">
           <div
             ref={trackRef}
-            className="flex items-start gap-16 md:gap-24 will-change-transform transition-transform duration-150 ease-out pt-1"
-            style={{ transform: `translate3d(-${translateX}px, 0, 0)` }}
+            className="flex items-start gap-16 md:gap-24 will-change-transform pt-1"
+            style={{ transform: 'translate3d(0px, 0, 0)' }}
           >
 
             {/* SLIDE 1: Profil & Filosofi (Matching Reference Image 1 Layout) */}

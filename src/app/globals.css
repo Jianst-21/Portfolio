@@ -26,6 +26,8 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -33,6 +35,17 @@ body {
   color: var(--ink);
   transition: background-color 0.3s ease, color 0.3s ease;
   font-family: var(--font-body), sans-serif;
+  /* Enable hardware-accelerated compositing for native-feeling scroll on mobile */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+  text-rendering: optimizeSpeed;
+}
+
+/* Promote all will-change elements to their own GPU layers */
+[style*="will-change"],
+.will-change-transform {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {

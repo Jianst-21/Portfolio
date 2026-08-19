@@ -1,38 +1,36 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
+// Uses direct DOM class toggle instead of React state to avoid re-renders.
+// The element starts invisible via CSS and transitions in when observed.
 export default function RevealOnScroll({ children, className = '', delay = 0 }) {
-  const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
+          // Apply delay via inline style, then trigger animation class
+          el.style.animationDelay = `${delay}ms`;
+          el.classList.add('animate-fade-up', 'opacity-100');
+          el.classList.remove('opacity-0');
+          observer.unobserve(el);
         }
       },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
-      }
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
-  }, []);
+    observer.observe(el);
+    return () => observer.unobserve(el);
+  }, [delay]);
 
   return (
     <div
       ref={ref}
-      className={`${className} ${isVisible ? 'animate-fade-up opacity-100' : 'opacity-0'}`}
-      style={{ animationDelay: `${delay}ms` }}
+      className={`${className} opacity-0`}
     >
       {children}
     </div>
