@@ -2,11 +2,11 @@
 
 Sleek, modern, and highly interactive personal developer portfolio website showcasing projects, capabilities, and work experience. Built with Next.js, React, TailwindCSS, and Three.js.
 
-🚀 Live Preview: [jinst-portfolio.vercel.app](https://jinst-portfolio.vercel.app) *(or your deployed domain)*
+ Live Preview: [jinst-portfolio.vercel.app](https://jianst-dev.vercel.app)
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 - **Interactive 3D Tech Cube**: A custom Three.js WebGL rotation stage displaying the core technology pillars (Frontend, Backend, and AI) on a 3D rotating cube.
 - **Live Website Preview Modal**: Renders live website deployments directly in-app inside a responsive glassmorphic iframe wrapper with device view toggle simulations (Desktop, Tablet, Mobile).
@@ -17,7 +17,7 @@ Sleek, modern, and highly interactive personal developer portfolio website showc
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework**: [Next.js](https://nextjs.org/) (App Router, Turbopack)
 - **Styling**: [TailwindCSS](https://tailwindcss.com/)
@@ -27,7 +27,7 @@ Sleek, modern, and highly interactive personal developer portfolio website showc
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```bash
 ├── public/                  # Static assets (images, CV PDF, project screenshots)
@@ -45,7 +45,7 @@ Sleek, modern, and highly interactive personal developer portfolio website showc
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 To run the project locally, follow these steps:
 
@@ -74,7 +74,7 @@ npm run start
 
 ---
 
-## 📝 Contact & Socials
+##  Contact & Socials
 
 - **Email**: [ajinotosutrisno212@gmail.com](mailto:ajinotosutrisno212@gmail.com)
 - **GitHub**: [@Jianst-21](https://github.com/Jianst-21)
