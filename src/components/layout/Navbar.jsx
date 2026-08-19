@@ -16,23 +16,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Typewriter effect on mount
-  useEffect(() => {
-    const target = 'Jinst.';
-    let i = 1;
-    const interval = setInterval(() => {
-      if (i < target.length) {
-        setLogoText(target.slice(0, i + 1));
-        i++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 180);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Futuristic scramble hover effect
-  const handleLogoHover = () => {
+  // Trigger scramble animation helper
+  const runScrambleAnimation = () => {
     const chars = '!@#$%^&*()_+{}:"<>?|[]\\,./;';
     const target = 'Jinst.';
     let iterations = 0;
@@ -50,12 +35,41 @@ export default function Navbar() {
           .join('')
       );
       
-      iterations += 1/3;
+      iterations += 1 / 3;
       if (iterations >= target.length) {
         setLogoText(target);
         clearInterval(interval);
       }
-    }, 25);
+    }, 30);
+  };
+
+  // Periodic animation: runs on mount and every 4.5 seconds
+  useEffect(() => {
+    // Initial typewriter on mount
+    const target = 'Jinst.';
+    let i = 1;
+    const initialTimer = setInterval(() => {
+      if (i < target.length) {
+        setLogoText(target.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(initialTimer);
+      }
+    }, 150);
+
+    // Periodic scramble animation loop every 2s
+    const loopInterval = setInterval(() => {
+      runScrambleAnimation();
+    }, 2000);
+
+    return () => {
+      clearInterval(initialTimer);
+      clearInterval(loopInterval);
+    };
+  }, []);
+
+  const handleLogoHover = () => {
+    runScrambleAnimation();
   };
 
   const navLinks = [

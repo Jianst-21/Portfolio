@@ -55,12 +55,21 @@ export default function AboutSection() {
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current || !trackRef.current) return;
+    let ticking = false;
+
+    const updateScroll = () => {
+      if (!containerRef.current || !trackRef.current) {
+        ticking = false;
+        return;
+      }
+
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const totalScrollable = rect.height - windowHeight;
-      if (totalScrollable <= 0) return;
+      if (totalScrollable <= 0) {
+        ticking = false;
+        return;
+      }
 
       const currentScroll = -rect.top;
       const progress = Math.max(0, Math.min(1, currentScroll / totalScrollable));
@@ -69,16 +78,24 @@ export default function AboutSection() {
       setMaxScroll(maxTrack);
       setTranslateX(progress * Math.max(0, maxTrack));
 
-      // Calculate active slide index (0 or 1)
       if (progress > 0.45) {
         setActiveSlide(1);
       } else {
         setActiveSlide(0);
       }
+
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScroll);
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    updateScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

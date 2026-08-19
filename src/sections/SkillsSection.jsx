@@ -108,29 +108,31 @@ export default function SkillsSection() {
 
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
+    let ticking = false;
+
+    const updateScroll = () => {
+      if (!containerRef.current) {
+        ticking = false;
+        return;
+      }
 
       const rect = containerRef.current.getBoundingClientRect();
-      
       const INTRO_BOUND = 0.1;
       const OUTRO_BOUND = 0.9;
 
-      // ── PROGRESS CALCULATION ───────────────────────────────────────────────
       const scrollableDistance = rect.height - window.innerHeight;
       const scrolledInto = -rect.top;
 
       let progress = 0;
-      if (scrolledInto > 0) {
+      if (scrolledInto > 0 && scrollableDistance > 0) {
         progress = Math.min(1, Math.max(0, scrolledInto / scrollableDistance));
       }
 
-      // ── PHASES LOGIC ───────────────────────────────────────────────────────
       if (progress < INTRO_BOUND) {
         setIsIdle(true);
         setActiveIndex(0);
       } else if (progress >= OUTRO_BOUND) {
-        setIsIdle(true); // OUTRO is now visually identical to INTRO
+        setIsIdle(true);
         setActiveIndex(TECH_ECOSYSTEM.length - 1);
       } else {
         setIsIdle(false);
@@ -141,20 +143,29 @@ export default function SkillsSection() {
         );
         setActiveIndex(newIndex);
       }
+
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScroll);
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    updateScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const activeTech = TECH_ECOSYSTEM[activeIndex];
 
   return (
-    <div ref={containerRef} className="relative h-[450vh] pt-12 md:pt-16" id="kemampuan">
+    <div ref={containerRef} className="relative h-[450vh] pt-6 md:pt-16" id="kemampuan">
 
       {/* Sticky Viewport Container */}
-      <div className="sticky top-16 lg:top-24 h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] flex flex-col justify-between pt-1 pb-3 lg:pt-2 lg:pb-6 overflow-hidden bg-transparent z-20">
+      <div className="sticky top-14 lg:top-24 h-[calc(100vh-60px)] lg:h-[calc(100vh-100px)] flex flex-col justify-between pt-1 pb-2 lg:pt-2 lg:pb-6 overflow-hidden bg-transparent z-20">
 
         {/* Dynamic Radial Ambient Glow */}
         <div
@@ -168,12 +179,12 @@ export default function SkillsSection() {
         />
 
         {/* Section Header */}
-        <div className="w-full shrink-0 z-30 pt-2 relative">
+        <div className="w-full shrink-0 z-30 pt-1 relative">
           <SectionHeader title="Ekosistem & Kemampuan" highlight="Kemampuan" />
         </div>
 
         {/* 3-Column Grid Layout */}
-        <div className="w-full max-w-[1120px] mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-center px-4 relative z-10">
+        <div className="w-full max-w-[1120px] mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center px-2 sm:px-4 relative z-10">
 
           {/* ── LEFT PANEL ──────────────────────────────────────────────────────── */}
           <div
@@ -221,7 +232,7 @@ export default function SkillsSection() {
           </div>
 
           {/* ── CENTER STAGE ─────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center relative min-h-[280px] lg:min-h-[340px] w-full">
+          <div className="lg:col-span-4 flex flex-col items-center justify-center relative min-h-[200px] lg:min-h-[340px] w-full">
 
             {/* Intro overlay label (Hanya terlihat saat intro/outro mode, tidak menimpa kubus) */}
             <div
@@ -252,8 +263,8 @@ export default function SkillsSection() {
             <div
               id="skills-stage-anchor"
               style={{
-                width: isMobile ? 200 : 360,
-                height: isMobile ? 200 : 360,
+                width: isMobile ? 140 : 360,
+                height: isMobile ? 140 : 360,
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
@@ -262,7 +273,7 @@ export default function SkillsSection() {
             >
               {/* Ambient glow */}
               <div
-                className="absolute w-36 h-36 lg:w-56 lg:h-56 rounded-full blur-3xl opacity-20 transition-colors duration-1000 pointer-events-none"
+                className="absolute w-28 h-28 lg:w-56 lg:h-56 rounded-full blur-2xl lg:blur-3xl opacity-20 transition-colors duration-1000 pointer-events-none"
                 style={{ backgroundColor: isIdle ? '#94a3b8' : activeTech.color }}
               />
 
@@ -271,43 +282,43 @@ export default function SkillsSection() {
                 activeIndex={activeIndex}
                 freeRotate={isIdle}
                 activeColor={isIdle ? '#94a3b8' : activeTech.color}
-                size={isMobile ? 200 : 360}
+                size={isMobile ? 140 : 360}
               />
             </div>
 
             {/* Mobile Card (Hanya muncul di mobile/tablet & tidak idle) */}
             {!isIdle && isMobile && (
               <div
-                className="w-full max-w-[340px] mt-3 border rounded-2xl bg-gradient-to-b from-[var(--card)]/70 to-[var(--card)]/30 backdrop-blur-md relative overflow-hidden transition-all duration-500"
+                className="w-full max-w-[340px] mt-2 border rounded-2xl bg-gradient-to-b from-[var(--card)]/90 to-[var(--card)]/60 backdrop-blur-md relative overflow-hidden transition-all duration-300 shadow-xl"
                 style={{
-                  borderColor: `${activeTech.color}22`,
+                  borderColor: `${activeTech.color}25`,
                 }}
               >
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-3">
+                <div className="p-3 sm:p-3.5">
+                  <div className="flex items-center justify-between mb-2">
                     <span
-                      className="font-mono text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full border font-medium flex items-center gap-1.5 transition-colors duration-500"
+                      className="font-mono text-[8.5px] uppercase tracking-widest px-2 py-0.5 rounded-full border font-medium flex items-center gap-1.5 transition-colors duration-500"
                       style={{ color: activeTech.color, borderColor: `${activeTech.color}28`, backgroundColor: `${activeTech.color}0a` }}
                     >
                       <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: activeTech.color }} />
                       {activeTech.category}
                     </span>
-                    <span className="font-mono text-[10px] text-[var(--muted)]">
+                    <span className="font-mono text-[9px] text-[var(--muted)]">
                       0{activeIndex + 1} / 0{TECH_ECOSYSTEM.length}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-display font-bold mb-1.5 text-[var(--ink)] transition-colors duration-500">
+                  <h3 className="text-base font-display font-bold mb-1 text-[var(--ink)] transition-colors duration-500">
                     {activeTech.name}
                   </h3>
 
-                  <p className="font-body text-[var(--muted)] text-[12.5px] leading-relaxed mb-3">
+                  <p className="font-body text-[var(--muted)] text-[11.5px] leading-snug mb-2">
                     {activeTech.desc}
                   </p>
 
-                  <div className="space-y-2 pt-3 border-t border-white/5">
+                  <div className="space-y-1 pt-2 border-t border-white/5">
                     {activeTech.capabilities.map((cap, i) => (
-                      <div key={i} className="flex items-center gap-2 font-mono text-[11px] text-[var(--muted)]">
+                      <div key={i} className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--muted)]">
                         <span className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: activeTech.color }} />
                         <span>{cap}</span>
                       </div>
@@ -315,23 +326,23 @@ export default function SkillsSection() {
                   </div>
                 </div>
 
-                <div className="h-px bg-white/5 mx-4" />
+                <div className="h-px bg-white/5 mx-3" />
 
-                <div className="p-4">
-                  <div className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--muted)] mb-2">
-                    <ShieldCheck size={13} style={{ color: activeTech.color, opacity: 0.8 }} />
+                <div className="p-3 sm:p-3.5 pt-2">
+                  <div className="flex items-center gap-1 font-mono text-[9px] text-[var(--muted)] mb-1">
+                    <ShieldCheck size={11} style={{ color: activeTech.color, opacity: 0.8 }} />
                     <span>Production Architecture</span>
                   </div>
 
-                  <h4 className="text-[15px] font-display font-bold mb-1.5 text-[var(--ink)] transition-colors duration-500">
+                  <h4 className="text-[13px] font-display font-bold mb-1 text-[var(--ink)] transition-colors duration-500">
                     {activeTech.rightTitle}
                   </h4>
 
-                  <p className="font-body text-[var(--muted)] text-[12.5px] leading-relaxed mb-3">
+                  <p className="font-body text-[var(--muted)] text-[11px] leading-snug mb-1.5">
                     {activeTech.rightDesc}
                   </p>
 
-                  <span className="font-mono text-[11px] font-medium" style={{ color: activeTech.color }}>
+                  <span className="font-mono text-[10px] font-medium" style={{ color: activeTech.color }}>
                     {activeTech.tagline}
                   </span>
                 </div>
