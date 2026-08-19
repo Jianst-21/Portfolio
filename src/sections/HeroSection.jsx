@@ -122,8 +122,8 @@ export default function HeroSection() {
             HALO, SAYA
           </span>
 
-          {/* Main Name Heading (Single Horizontal Line) */}
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--ink)] leading-tight mb-5 whitespace-nowrap">
+          {/* Main Name Heading */}
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--ink)] leading-tight mb-5">
             Aji Noto Sutrisno
           </h1>
 
@@ -244,7 +244,7 @@ export default function HeroSection() {
       </div>
 
       {/* Metric Ticker Section Pinned Right at Bottom Edge of Screen 1 */}
-      <div className="w-full shrink-0 pt-2 pb-1">
+      <div className="w-full shrink-0 pt-2 pb-1 overflow-hidden">
         <MetricTickerSection />
       </div>
 
