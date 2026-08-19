@@ -57,10 +57,10 @@ export default function Navbar() {
       }
     }, 150);
 
-    // Periodic scramble animation loop every 2s
+    // Periodic scramble animation loop every 3.5s
     const loopInterval = setInterval(() => {
       runScrambleAnimation();
-    }, 2000);
+    }, 3500);
 
     return () => {
       clearInterval(initialTimer);

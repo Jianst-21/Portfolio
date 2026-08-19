@@ -51,9 +51,10 @@ export default function InteractiveTechStage3D({
   const activeIdxRef   = useRef(activeIndex);
   const freeRotateRef  = useRef(freeRotate);
 
-  // Keep refs in sync with props (animation loop reads refs, not closure values)
-  useEffect(() => { activeIdxRef.current  = activeIndex;  }, [activeIndex]);
-  useEffect(() => { freeRotateRef.current = freeRotate;   }, [freeRotate]);
+  // Sync refs synchronously during render so Three.js animation loop
+  // picks up the new value on the very next rAF frame (no useEffect delay)
+  activeIdxRef.current  = activeIndex;
+  freeRotateRef.current = freeRotate;
 
   // ── Three.js scene (mounted once) ──────────────────────────────────────────
   useEffect(() => {
@@ -117,20 +118,26 @@ export default function InteractiveTechStage3D({
     scene.add(rim);
 
     let raf;
+    let lastTime = performance.now();
+
     const tick = () => {
       raf = requestAnimationFrame(tick);
-      const t = performance.now() * 0.001;
+      const now = performance.now();
+      const dt  = Math.min((now - lastTime) / 1000, 0.05); // cap at 50ms to avoid jumps
+      lastTime = now;
+      const t = now * 0.001;
 
       if (cubeRef.current) {
         if (freeRotateRef.current) {
-          // ── Free rotation (intro mode) ──────────────────────────────────────
-          cubeRef.current.rotation.y += 0.009;
-          cubeRef.current.rotation.x += 0.005;
+          // ── Free rotation (intro mode) — dt-normalized ──────────────────────
+          cubeRef.current.rotation.y += 0.55 * dt;
+          cubeRef.current.rotation.x += 0.30 * dt;
         } else {
-          // ── Face-lock (detail mode) — lerp toward target face ───────────────
+          // ── Face-lock — exponential lerp, dt-normalized for any frame rate ──
           const target = FACE_ROTATIONS[activeIdxRef.current % FACE_ROTATIONS.length];
-          cubeRef.current.rotation.y += shortAngle(cubeRef.current.rotation.y, target.y) * 0.14;
-          cubeRef.current.rotation.x += shortAngle(cubeRef.current.rotation.x, target.x) * 0.14;
+          const speed  = 1 - Math.pow(0.008, dt); // ~7 frames to settle at 60fps
+          cubeRef.current.rotation.y += shortAngle(cubeRef.current.rotation.y, target.y) * speed;
+          cubeRef.current.rotation.x += shortAngle(cubeRef.current.rotation.x, target.x) * speed;
         }
 
         // Gentle floating bob (always active)
